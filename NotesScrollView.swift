@@ -40,7 +40,7 @@ struct NoteView: View {
         
         let titleFontSize = maxNoteHeight * 0.105
         let contentFontSize = titleFontSize * 0.9
-        let typeFontSize = titleFontSize * 0.9
+//        let typeFontSize = titleFontSize * 0.9
         
         VStack (alignment: .leading, spacing: maxNoteHeight * 0.02) {
             Text(note.title ?? "")
@@ -60,9 +60,9 @@ struct NoteView: View {
                 .foregroundStyle(.gray.opacity(0.2))
                 .padding(.vertical, maxNoteHeight * 0.01)
             
-            Text(note.category?.name ?? "Нет категории")
-                .font(.system(size: typeFontSize, weight: .semibold, design: .rounded))
-                .padding(.horizontal, spaceWidth * 0.04)
+//            Text(note.category?.name ?? "Нет категории")
+//                .font(.system(size: typeFontSize, weight: .semibold, design: .rounded))
+//                .padding(.horizontal, spaceWidth * 0.04)
         }
         .foregroundColor(Color(red: 1/255, green: 17/255, blue: 4/255)).opacity(0.9)
         .padding(.bottom, maxNoteHeight * 0.03)

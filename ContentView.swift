@@ -1,63 +1,47 @@
-import SwiftUI
-
-struct ContentView: View {
-    var body: some View {
-        ZStack {
-            Color(red: 253/255, green: 252/255, blue: 250/255)
-                .ignoresSafeArea()
-            
-            CurrentDateScreen()
-        }
-    }
-}
-
-#Preview {
-    ContentView()
-}
-
-
-
-
-
 //import SwiftUI
-//import CoreData
-//
 //
 //struct ContentView: View {
-//    @Environment(\.managedObjectContext) private var viewContext
-//
-//    @FetchRequest(
-//        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-//        animation: .default)
-//    private var items: FetchedResults<Item>
-//
+//    
 //    var body: some View {
-//        NavigationView {
-//            List {
-//                ForEach(items) { item in
-//                    NavigationLink {
-//                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-//                    } label: {
-//                        Text(item.timestamp!, formatter: itemFormatter)
-//                    }
-//                }
-//                .onDelete(perform: deleteItems)
-//            }
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    EditButton()
-//                }
-//                ToolbarItem {
-//                    Button(action: addItem) {
-//                        Label("Add Item", systemImage: "plus")
-//                    }
-//                }
-//            }
-//            Text("Select an item")
+//        ZStack {
+//            Color(red: 253/255, green: 252/255, blue: 250/255)
+//                .ignoresSafeArea()
+//            
+//            CurrentDateScreen()
 //        }
 //    }
+//}
 //
-//    
+//#Preview {
+//    ContentView()
+//}
+
+
+
+
+import SwiftUI
+import CoreData
+
+struct ContentView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \NoteEntity.id, ascending: true)],
+        animation: .default)
+    private var notes: FetchedResults<NoteEntity>
+
+    var body: some View {
+        VStack {
+            List {
+                ForEach(notes) { note in
+                    Text("Item at \(note.date!)")
+                }
+//                .onDelete(perform: deleteItems)
+            }
+            buttonPlusView()
+        }
+    }
+
 //    private func addItem() {
 //        withAnimation {
 //            let newItem = Item(context: viewContext)
@@ -73,11 +57,10 @@ struct ContentView: View {
 //            }
 //        }
 //    }
-//
-//    
+
 //    private func deleteItems(offsets: IndexSet) {
 //        withAnimation {
-//            offsets.map { items[$0] }.forEach(viewContext.delete)
+//            offsets.map { notes[$0] }.forEach(viewContext.delete)
 //
 //            do {
 //                try viewContext.save()
@@ -89,9 +72,8 @@ struct ContentView: View {
 //            }
 //        }
 //    }
-//}
-//
-//
+}
+
 //private let itemFormatter: DateFormatter = {
 //    let formatter = DateFormatter()
 //    formatter.dateStyle = .short
@@ -99,6 +81,6 @@ struct ContentView: View {
 //    return formatter
 //}()
 //
-//#Preview {
-//    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//}
+#Preview {
+    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+}
