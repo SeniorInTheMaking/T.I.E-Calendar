@@ -10,7 +10,7 @@ struct buttonPlusView: View {
         Button(action: {
             let newNote = NoteEntity(context: context)
             newNote.id = UUID()
-            newNote.title = "New Not"
+            newNote.title = "New Note"
             newNote.content = "Add your content here..."
             newNote.date = Date()
 //            newNote.category = nil
