@@ -8,10 +8,14 @@ struct PersistenceController {
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
+//        for _ in 0..<10 {
+//            let newItem = NoteEntity(context: viewContext)
+//            newItem.date = Date()
+//        }
+//        return result
+        
+        let testItem = NoteEntity(context: viewContext)
+        
         do {
             try viewContext.save()
         } catch {
