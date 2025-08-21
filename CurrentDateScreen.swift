@@ -42,14 +42,19 @@ struct CurrentDateScreen: View {
                     //                .padding(.horizontal, geometry.size.width * 0.04)
                     .padding(.top, geometry.size.height * 0.01)
                 }
-                buttonPlusView(spaceWidth: min(geometry.size.height, geometry.size.width))
-                    .offset(y: max(geometry.size.height, geometry.size.width) * 0.42)
+                
+                VStack {
+                    Spacer()
+                    
+                    ButtonPlusView(spaceWidth: min(geometry.size.height,                      geometry.size.width),
+                                   spaceHeight: max(geometry.size.height, geometry.size.width))
+                    //                .offset(y: -max(geometry.size.height, geometry.size.width) * 0.02)
+                    
+//                    Button("Очистить все данные") {
+//                        PersistenceController.shared.resetAllData()
+//                    }
+                }
             }
         }
     }
-}
-
-
-#Preview {
-    CurrentDateScreen()
 }
