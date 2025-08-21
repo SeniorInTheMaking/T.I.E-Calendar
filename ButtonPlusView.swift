@@ -5,7 +5,7 @@ import CoreData
 struct ButtonPlusView: View {
     let spaceWidth: CGFloat
     let spaceHeight: CGFloat
-    @State private var showList = true
+    @State private var showList = false
     
     @Environment(\.managedObjectContext) private var viewContext
 
@@ -63,7 +63,7 @@ struct categoriesListView: View {
                                 rowHeight: rowHeight,
                                 showList: $showList)
                 }
-                AddNewCategoryRow(rowWidth: spaceWidth * 0.6,
+                AddNewCategoryRow(spaceWidth: spaceWidth,
                                   rowHeight: rowHeight,
                                   showList: $showList)
             }
@@ -109,7 +109,7 @@ struct CategoryRow: View {
                         )
                     
                     Text(category.name ?? "No name")
-                        .font(.system(size: 24, weight: .medium, design: .rounded))
+                        .font(.system(size: 22, weight: .medium, design: .rounded))
                         .foregroundColor(Color("systemTitle1"))
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
@@ -133,17 +133,24 @@ struct CategoryRow: View {
 }
 
 
+
+
+
 struct AddNewCategoryRow: View {
-    let rowWidth: CGFloat
+    let spaceWidth: CGFloat
     let rowHeight: CGFloat
     @Binding var showList: Bool
     
+    @State private var isPressed = false
+    
     var body: some View {
+        let rowWidth = spaceWidth * 0.6
             
         Button(action: {
-            withAnimation(.spring(duration: 0.5)) {
-                showList = false
-            }
+            isPressed = true
+//            withAnimation(.spring(duration: 0.5)) {
+//                showList = false
+//            }
         }) {
             HStack (spacing: rowWidth * 0.05) {
                 Image(systemName: "plus")
@@ -165,105 +172,9 @@ struct AddNewCategoryRow: View {
             .padding()
             .frame(height: rowHeight)
             .contentShape(Rectangle())
+            }
+        .sheet(isPresented: $isPressed) {
+            AddCategoryView(spaceWidth: spaceWidth)
         }
     }
 }
-
-
-
-
-
-
-struct AddCategoryView: View {
-    let spaceWidth: CGFloat
-
-    @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.dismiss) private var dismiss
-    
-    @State private var categoryName: String = ""
-    @State private var categoryColor: String = "noteBlue"
-    
-    let availableColors = ["noteBlue", "noteYellow", "noteRed", "noteGreen",
-                          "noteOrange", "notePurple", "notePink", "noteGray"]
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Название категории")) {
-                    TextField("Введите название", text: $categoryName)
-                }
-                
-                Section(header: Text("Цвет категории")) {
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4)) {
-                        ForEach(availableColors, id: \.self) { color in
-                            ColorCircleView(colorName: color, isSelected: categoryColor == color, spaceWidth: spaceWidth)
-                                .onTapGesture {
-                                    categoryColor = color
-                                }
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Новая категория")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Сохранить") {
-                        addCategory()
-                    }
-                    .disabled(categoryName.isEmpty)
-                }
-            }
-        }
-    }
-    private func addCategory() {
-        let newCategory = CategoryEntity(context: viewContext)
-        newCategory.id = UUID()
-        newCategory.name = categoryName
-        newCategory.color = categoryColor
-        
-        do {
-            try viewContext.save()
-            dismiss()
-        } catch {
-            print("Ошибка сохранения категории: \(error.localizedDescription)")
-        }
-    }
-}
-
-
-struct ColorCircleView: View {
-    let colorName: String
-    let isSelected: Bool
-    let spaceWidth: CGFloat
-    
-    var body: some View {
-        let circleSize = spaceWidth * 0.1
-        let frameSize = circleSize * 1.1
-        let markSize = circleSize * 0.4
-        
-        ZStack {
-            Circle()
-                .fill(Color(colorName))
-                .frame(width: circleSize)
-            
-            if isSelected {
-                Circle()
-                    .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                    .frame(width: frameSize, height: frameSize)
-                
-                Image(systemName: "checkmark")
-                    .foregroundColor(.primary)
-                    .font(.system(size: markSize, weight: .bold))
-            }
-        }
-        .frame(width: frameSize, height: frameSize)
-    }
-}
-
-
