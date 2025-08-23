@@ -11,10 +11,10 @@ struct PersistenceController {
         
         let testItem = NoteEntity(context: viewContext)
         
-        let eventCategory = CategoryEntity(context: viewContext)
-        eventCategory.id = UUID()
-        eventCategory.name = "Cобытие"
-        eventCategory.color = "noteOrange"
+//        let eventCategory = CategoryEntity(context: viewContext)
+//        eventCategory.id = UUID()
+//        eventCategory.name = "Cобытие"
+//        eventCategory.color = "noteOrange"
         
         do {
             try viewContext.save()

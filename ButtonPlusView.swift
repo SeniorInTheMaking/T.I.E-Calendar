@@ -53,13 +53,14 @@ struct categoriesListView: View {
     private var categories: FetchedResults<CategoryEntity>
     
     var body: some View {
-        let rowHeight = 65.0
+        let rowHeight = 60.0
         
         ScrollView {
             LazyVStack (spacing: 0) {
                 ForEach(categories, id: \.id) { category in
                     CategoryRow(category: category,
-                                rowWidth: spaceWidth * 0.6,
+                                spaceWidth: spaceWidth,
+                                spaceHeight: spaceHeight,
                                 rowHeight: rowHeight,
                                 showList: $showList)
                 }
@@ -87,17 +88,22 @@ struct categoriesListView: View {
 
 struct CategoryRow: View {
     let category: CategoryEntity
-    let rowWidth: CGFloat
+    let spaceWidth: CGFloat
+    let spaceHeight: CGFloat
     let rowHeight: CGFloat
     @Binding var showList: Bool
     
+    @State private var isPressed: Bool = false
+    
     var body: some View {
+        let rowWidth = spaceWidth * 0.6
         VStack(spacing: 0) {
             
             Button(action: {
-                withAnimation(.spring(duration: 0.5)) {
-                    showList = false
-                }
+                isPressed = true
+//                withAnimation(.spring(duration: 0.5)) {
+//                    showList = false
+//                }
             }) {
                 HStack (spacing: rowWidth * 0.05) {
                     Circle()
@@ -109,7 +115,7 @@ struct CategoryRow: View {
                         )
                     
                     Text(category.name ?? "No name")
-                        .font(.system(size: 22, weight: .medium, design: .rounded))
+                        .font(.system(size: 22, weight: .medium, design: .default))
                         .foregroundColor(Color("systemTitle1"))
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
@@ -129,11 +135,11 @@ struct CategoryRow: View {
                 .frame(width: rowWidth * 0.9)
         }
         .frame(height: rowHeight)
+        .sheet(isPresented: $isPressed) {
+            AddNoteView(category: category, spaceWidth: spaceWidth, spaceHeight: spaceHeight)
+        }
     }
 }
-
-
-
 
 
 struct AddNewCategoryRow: View {
@@ -148,9 +154,6 @@ struct AddNewCategoryRow: View {
             
         Button(action: {
             isPressed = true
-//            withAnimation(.spring(duration: 0.5)) {
-//                showList = false
-//            }
         }) {
             HStack (spacing: rowWidth * 0.05) {
                 Image(systemName: "plus")
@@ -158,7 +161,7 @@ struct AddNewCategoryRow: View {
                     .frame(width: 18)
                 
                 Text("Новая категория")
-                    .font(.system(size: 24, weight: .medium, design: .rounded))
+                    .font(.system(size: 24, weight: .medium, design: .default))
                     .foregroundColor(Color("systemTitle1"))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)

@@ -40,13 +40,13 @@ struct CurrentDateScreen: View {
                                     spaceHeight: max(geometry.size.height, geometry.size.width) * 0.6,
                                     spaceWidth: geometry.size.width)
                     //                .padding(.horizontal, geometry.size.width * 0.04)
-                    .padding(.top, geometry.size.height * 0.01)
+                    .padding(.top, geometry.size.height * 0.015)
                 }
                 
                 VStack {
                     Spacer()
                     
-                    ButtonPlusView(spaceWidth: min(geometry.size.height,                      geometry.size.width),
+                    ButtonPlusView(spaceWidth: min(geometry.size.height, geometry.size.width),
                                    spaceHeight: max(geometry.size.height, geometry.size.width))
                     //                .offset(y: -max(geometry.size.height, geometry.size.width) * 0.02)
                     

@@ -182,7 +182,7 @@ struct WeekRow: View {
                 
                     .background(
                         Circle()
-                            .fill(Color.secondary.opacity(0.5))
+                            .fill(Color.secondary.opacity(0.4))
                             .scaleEffect(showCircle ? isSelected ? 1.25 : 0.1 : 0)
                             .opacity(isSelected ? 1 : 0)
                             .opacity(weekRowOpacity)
