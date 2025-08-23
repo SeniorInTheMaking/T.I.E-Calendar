@@ -70,7 +70,7 @@ struct categoriesListView: View {
             }
         }
         .frame(maxWidth: spaceWidth * 0.7,
-               maxHeight: rowHeight * min(5.2, CGFloat(categories.count) + 0.2))
+               maxHeight: rowHeight * min(5.2, CGFloat(categories.count) + 1.0))
         .background(
             RoundedRectangle(cornerRadius: 15)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)

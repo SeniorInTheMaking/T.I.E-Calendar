@@ -21,7 +21,7 @@ struct NotesScrollView: View {
                 } else {
                     ForEach(notes) { note in
                         NoteView(note: note, spaceHeight: spaceHeight, spaceWidth: spaceWidth)
-                            .padding(.horizontal, spaceWidth * 0.045)
+                            .padding(.horizontal, spaceWidth * 0.05)
                             .padding(.top, spaceHeight * 0.04)
                     }
                 }
@@ -38,22 +38,44 @@ struct NoteView: View {
     
     @State private var isExpanded = false
     
+    var maskView: some View {
+        if checkContentHeight(content: note.content ?? "", lines: 5, fontSize: 18, maxWidth: spaceWidth * 0.92) && !isExpanded {
+            return AnyView(
+                LinearGradient(
+                    gradient: Gradient(stops: [
+                        .init(color: .black, location: 0),
+                        .init(color: .black, location: 0.4),
+                        .init(color: .clear, location: 1)
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+        } else {
+            return AnyView(Color.black)
+        }
+    }
+    
     var body: some View {
+        let cleanContent = cleanContent(note.content ?? "")
         let maxNoteHeight = spaceHeight * 0.4
         
         VStack (alignment: .leading, spacing: maxNoteHeight * 0.02) {
             Text(note.title ?? "No date")
                 .font(.system(size: 20, weight: .medium, design: .default))
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, spaceWidth * 0.04)
                 .lineLimit(1)
+                .padding(.horizontal, spaceWidth * 0.04)
                 .padding(.top, maxNoteHeight * 0.05)
             
-            Text(note.content ?? "No content")
-                .font(.system(size: 18, weight: .regular, design: .default))
-                .padding(.horizontal, spaceWidth * 0.04)
-                .lineLimit(isExpanded ? nil : 4)
-                .truncationMode(.head)
+            ZStack(alignment: .bottom) {
+                Text(isExpanded ? note.content ?? "" : cleanContent)
+                    .font(.system(size: 18, weight: .regular, design: .default))
+                    .padding(.horizontal, spaceWidth * 0.04)
+                    .lineLimit(isExpanded ? nil : 5)
+                    .mask(maskView)
+                    .animation(.easeInOut(duration: 0.4), value: isExpanded)
+            }
             
             Rectangle()
                 .frame(height: 1)
@@ -90,6 +112,24 @@ struct NoteView: View {
                 isExpanded.toggle()
             }
         }
+    }
+    
+    private func cleanContent(_ content: String) -> String {
+        content
+            .components(separatedBy: .newlines)
+            .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+            .joined(separator: "\n")
+    }
+    
+    private func checkContentHeight(content: String, lines: Int, fontSize: CGFloat, maxWidth: CGFloat) -> Bool {
+        let font = UIFont.systemFont(ofSize: fontSize)
+        let boundingBox = content.boundingRect(
+            with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: [.font: font],
+            context: nil
+        )
+        return boundingBox.height > font.lineHeight * CGFloat(lines)
     }
 }
 
