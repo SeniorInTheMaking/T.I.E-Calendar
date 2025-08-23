@@ -157,20 +157,19 @@ struct AddNoteView: View {
                     .minimumScaleFactor(0.5)
                     .disabled(noteContent.isEmpty)
                 }
-                //            .padding(.horizontal, spaceWidth * 0.03)
-                .padding(.bottom, 15)
+                .padding(.bottom, 20)
                 
                 
                 VStack(spacing: 0) {
                     ZStack(alignment: .leading) {
                         if noteTitle.isEmpty {
                             Text("Заголовок")
-                                .font(.system(size: 19, weight: .semibold))
+                                .font(.system(size: 18, weight: .semibold))
                                 .foregroundStyle(.brown.opacity(0.7))
                         }
                         
                         TextField("", text: $noteTitle)
-                            .font(.system(size: 19, weight: .semibold))
+                            .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.primary)
                             .focused($isTitleFocused)
                     }

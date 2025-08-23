@@ -46,6 +46,22 @@ struct CurrentDateScreen: View {
                 VStack {
                     Spacer()
                     
+                    LinearGradient(
+                        gradient: Gradient(stops: [
+                            .init(color: .clear, location: 0),
+                            .init(color: .clear, location: 0.7),
+                            .init(color: Color("appBackground"), location: 1)
+                        ]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .allowsHitTesting(false)
+                }
+                .ignoresSafeArea()
+                
+                VStack {
+                    Spacer()
+                    
                     ButtonPlusView(spaceWidth: min(geometry.size.height, geometry.size.width),
                                    spaceHeight: max(geometry.size.height, geometry.size.width))
                     //                .offset(y: -max(geometry.size.height, geometry.size.width) * 0.02)
